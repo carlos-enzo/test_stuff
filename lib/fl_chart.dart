@@ -12,7 +12,32 @@ class Coord {
   double y;
 }
 
-List<FlSpot> generateData({required double FNW, double offset = 0, bool? isAbove}) {
+List<FlSpot> generateLnData({double offset = 0, bool? isAbove}) {
+  return List<FlSpot>.generate(10, (i) {
+    if (i == 0) {
+      return FlSpot(
+        0.0,
+        0.0,
+      );
+    }
+
+    double y = 0;
+    if (isAbove == null) {
+      y = math.log(i * 10) + 50;
+    } else if (isAbove) {
+      y = math.log(i * 10) + 50 + offset;
+    } else if (!isAbove) {
+      y = math.log(i * 10) + 50 - offset;
+    }
+    print('x: $i , y: $y');
+    return FlSpot(
+      i + 0.0,
+      y,
+    );
+  });
+}
+
+List<FlSpot> generateEnzoData({required double FNW, double offset = 0, bool? isAbove}) {
   return List<FlSpot>.generate(10, (i) {
     late double enzoScore;
     print('FNW: $FNW');
@@ -182,8 +207,9 @@ class _LineChart extends StatelessWidget {
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
-        dashArray: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        spots: generateData(FNW: 100000, offset: 30000, isAbove: false),
+        dashArray: List<int>.generate(10, (i) => i),
+        spots:
+            generateLnData(offset: 30, isAbove: false), //generateEnzoData(FNW: 100000, offset: 30000, isAbove: false),
       );
 
   LineChartBarData get lineChartBarData1_2 => LineChartBarData(
@@ -192,7 +218,7 @@ class _LineChart extends StatelessWidget {
         barWidth: 2,
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
-        spots: generateData(FNW: 100000),
+        spots: generateLnData(), //generateEnzoData(FNW: 100000),
       );
 
   LineChartBarData get lineChartBarData1_3 => LineChartBarData(
@@ -202,8 +228,8 @@ class _LineChart extends StatelessWidget {
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
-        dashArray: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        spots: generateData(FNW: 100000, offset: 30000, isAbove: true),
+        dashArray: List<int>.generate(10, (i) => i),
+        spots: generateLnData(offset: 30, isAbove: true), //generateEnzoData(FNW: 100000, offset: 30000, isAbove: true),
       );
 }
 
